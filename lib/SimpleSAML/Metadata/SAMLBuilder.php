@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Class for generating SAML 2.0 metadata from SimpleSAMLphp metadata arrays.
  *
@@ -51,7 +50,7 @@ class SimpleSAML_Metadata_SAMLBuilder
         $this->maxCache = $maxCache;
         $this->maxDuration = $maxDuration;
 
-        $this->entityDescriptor = new SAML2_XML_md_EntityDescriptor();
+        $this->entityDescriptor = new SAML2\XML\md\EntityDescriptor();
         $this->entityDescriptor->entityID = $entityId;
     }
 
@@ -135,9 +134,9 @@ class SimpleSAML_Metadata_SAMLBuilder
      * Add extensions to the metadata.
      *
      * @param SimpleSAML_Configuration    $metadata The metadata to get extensions from.
-     * @param SAML2_XML_md_RoleDescriptor $e Reference to the element where the Extensions element should be included.
+     * @param SAML2\XML\md\RoleDescriptor $e Reference to the element where the Extensions element should be included.
      */
-    private function addExtensions(SimpleSAML_Configuration $metadata, SAML2_XML_md_RoleDescriptor $e)
+    private function addExtensions(SimpleSAML_Configuration $metadata, SAML2\XML\md\RoleDescriptor $e)
     {
         if ($metadata->hasValue('tags')) {
             $a = new SAML2_XML_saml_Attribute();
@@ -202,7 +201,7 @@ class SimpleSAML_Metadata_SAMLBuilder
                         $ri->registrationAuthority = $riValues;
                         break;
                     case 'instant':
-                        $ri->registrationInstant = SAML2_Utils::xsDateTimeToTimestamp($riValues);
+                        $ri->registrationInstant = SAML2\Utils::xsDateTimeToTimestamp($riValues);
                         break;
                     case 'policies':
                         $ri->RegistrationPolicy = $riValues;
@@ -322,7 +321,7 @@ class SimpleSAML_Metadata_SAMLBuilder
      * @param array $endpoints The endpoints.
      * @param bool  $indexed Whether the endpoints should be indexed.
      *
-     * @return array An array of endpoint objects, either SAML2_XML_md_EndpointType or SAML2_XML_md_IndexedEndpointType.
+     * @return array An array of endpoint objects, either SAML2\XML\md\EndpointType or SAML2_XML_md_IndexedEndpointType.
      */
     private static function createEndpoints(array $endpoints, $indexed)
     {
@@ -334,7 +333,7 @@ class SimpleSAML_Metadata_SAMLBuilder
             if ($indexed) {
                 $t = new SAML2_XML_md_IndexedEndpointType();
             } else {
-                $t = new SAML2_XML_md_EndpointType();
+                $t = new SAML2\XML\md\EndpointType();
             }
 
             $t->Binding = $ep['Binding'];
@@ -529,7 +528,7 @@ class SimpleSAML_Metadata_SAMLBuilder
 
         $metadata = SimpleSAML_Configuration::loadFromArray($metadata, $metadata['entityid']);
 
-        $e = new SAML2_XML_md_IDPSSODescriptor();
+        $e = new \SAML2\XML\md\IDPSSODescriptor();
         $e->protocolSupportEnumeration[] = 'urn:oasis:names:tc:SAML:2.0:protocol';
 
         if ($metadata->hasValue('sign.authnrequest')) {
@@ -681,7 +680,7 @@ class SimpleSAML_Metadata_SAMLBuilder
         // TODO: remove this check as soon as getContact() is called always before calling this function
         $details = \SimpleSAML\Utils\Config\Metadata::getContact($details);
 
-        $e = new SAML2_XML_md_ContactPerson();
+        $e = new SAML2\XML\md\ContactPerson();
         $e->contactType = $type;
 
         if (isset($details['company'])) {
@@ -721,16 +720,16 @@ class SimpleSAML_Metadata_SAMLBuilder
     /**
      * Add a KeyDescriptor with an X509 certificate.
      *
-     * @param SAML2_XML_md_RoleDescriptor $rd The RoleDescriptor the certificate should be added to.
+     * @param SAML2\XML\md\RoleDescriptor $rd The RoleDescriptor the certificate should be added to.
      * @param string                      $use The value of the 'use' attribute.
      * @param string                      $x509data The certificate data.
      */
-    private function addX509KeyDescriptor(SAML2_XML_md_RoleDescriptor $rd, $use, $x509data)
+    private function addX509KeyDescriptor(SAML2\XML\md\RoleDescriptor $rd, $use, $x509data)
     {
         assert('in_array($use, array("encryption", "signing"), TRUE)');
         assert('is_string($x509data)');
 
-        $keyDescriptor = SAML2_Utils::createKeyDescriptor($x509data);
+        $keyDescriptor = SAML2\Utils::createKeyDescriptor($x509data);
         $keyDescriptor->use = $use;
         $rd->KeyDescriptor[] = $keyDescriptor;
     }
@@ -741,10 +740,10 @@ class SimpleSAML_Metadata_SAMLBuilder
      *
      * Helper function for adding a certificate to the metadata.
      *
-     * @param SAML2_XML_md_RoleDescriptor $rd The RoleDescriptor the certificate should be added to.
+     * @param SAML2\XML\md\RoleDescriptor $rd The RoleDescriptor the certificate should be added to.
      * @param SimpleSAML_Configuration    $metadata The metadata of the entity.
      */
-    private function addCertificate(SAML2_XML_md_RoleDescriptor $rd, SimpleSAML_Configuration $metadata)
+    private function addCertificate(SAML2\XML\md\RoleDescriptor $rd, SimpleSAML_Configuration $metadata)
     {
         $keys = $metadata->getPublicKeys();
         if ($keys !== null) {
