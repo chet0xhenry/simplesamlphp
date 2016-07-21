@@ -267,6 +267,8 @@ class Logger
      */
     public static function flush()
     {
+        //fts
+        return;
         try {
             $s = \SimpleSAML_Session::getSessionFromRequest();
         } catch (\Exception $e) {

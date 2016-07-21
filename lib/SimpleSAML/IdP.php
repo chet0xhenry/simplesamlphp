@@ -16,7 +16,7 @@ class SimpleSAML_IdP
      *
      * @var array
      */
-    private static $idpCache = array();
+    protected static $idpCache = array();
 
 
     /**
@@ -24,7 +24,7 @@ class SimpleSAML_IdP
      *
      * @var string
      */
-    private $id;
+    protected $id;
 
 
     /**
@@ -35,7 +35,7 @@ class SimpleSAML_IdP
      *
      * @var string
      */
-    private $associationGroup;
+    protected $associationGroup;
 
 
     /**
@@ -43,7 +43,7 @@ class SimpleSAML_IdP
      *
      * @var SimpleSAML_Configuration
      */
-    private $config;
+    protected $config;
 
 
     /**
@@ -51,7 +51,7 @@ class SimpleSAML_IdP
      *
      * @var SimpleSAML_Auth_Simple
      */
-    private $authSource;
+    protected $authSource;
 
 
     /**
@@ -296,7 +296,7 @@ class SimpleSAML_IdP
      *
      * @throws SimpleSAML_Error_Exception If we are not authenticated.
      */
-    public static function postAuth(array $state)
+    public function postAuth(array $state)
     {
         $idp = SimpleSAML_IdP::getByState($state);
 
